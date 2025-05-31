@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Vinyl Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white">
+<div class="container mt-5">
+    <h1 class="mb-4">Коллекция винилов</h1>
+
+    <!-- ВРЕМЕННО: вывод текущего пользователя -->
+    <p>Пользователь: {{ current_user.username if current_user.is_authenticated else 'Гость' }}</p>
+
+    <div class="row">
+        {% for vinyl in vinyls %}
+            <div class="col-md-4 mb-4">
+                <div class="card bg-secondary text-white">
+                    <img src="{{ url_for('static', filename='images/vinyls/' ~ vinyl.cover_image) }}" class="card-img-top" alt="Обложка">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ vinyl.title }}</h5>
+                        <p class="card-text">Цена: {{ vinyl.price }} ₽</p>
+                        {% if vinyl.onSale %}
+                            <span class="badge bg-warning text-dark">Скидка!</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- КНОПКА для админов -->
+    {% if current_user.is_authenticated %}
+        <div class="text-end mt-4">
+            <a href="{{ url_for('admin.add_vinyl') }}" class="btn btn-success">➕ Добавить винил</a>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>
